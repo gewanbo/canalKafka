@@ -12,6 +12,7 @@ esac
 base=${bin_abs_path}/..
 client_mode="Simple"
 logback_configurationFile=$base/conf/logback.xml
+example_configurationFile=$base/conf/example.xml
 export LANG=en_US.UTF-8
 export BASE=$base
 
@@ -68,7 +69,7 @@ fi
 JAVA_OPTS=" $JAVA_OPTS -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8"
 CANAL_OPTS="-DappName=otter-canal-example -Dlogback.configurationFile=$logback_configurationFile"
 
-if [ -e $logback_configurationFile ]
+if [ -e $logback_configurationFile -a -e $example_configurationFile ]
 then 
 	
 	for i in $base/lib/*;
@@ -80,6 +81,7 @@ then
   	cd $bin_abs_path
  	
 	echo LOG CONFIGURATION : $logback_configurationFile
+	echo EXAMPLE CONFIGURATION : $example_configurationFile
 	echo client mode : $client_mode 
 	echo CLASSPATH :$CLASSPATH
 	if [ $client_mode == "Cluster" ] ; then 
@@ -92,5 +94,5 @@ then
 	echo "cd to $current_path for continue"
   	cd $current_path
 else 
-	echo "client mode("$client_mode") OR log configration file($logback_configurationFile) is not exist,please create then first!"
+	echo "client mode("$client_mode") OR log configration file($logback_configurationFile, $example_configurationFile) is not exist,please create then first!"
 fi
