@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment/>
+    <entry key="canal.server">localhost</entry>
+    <entry key="canal.port">11111</entry>
+    <entry key="canal.instance">example</entry>
+
+    <entry key="kafka.brokers">localhost:9092</entry>
+    <entry key="kafka.topic">test</entry>
+
+</properties>
