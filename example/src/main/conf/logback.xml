@@ -63,6 +63,11 @@
         <level value="INFO" />  
         <appender-ref ref="ENTRY_LOG" />
     </logger>
+
+	<logger name="com.alibaba.otter.canal.example.AbstractCMS" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="ENTRY_LOG" />
+	</logger>
 	
 	<root level="INFO">
 		<!--  

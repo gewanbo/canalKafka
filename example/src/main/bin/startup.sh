@@ -67,7 +67,7 @@ else
 fi
 
 JAVA_OPTS=" $JAVA_OPTS -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8"
-CANAL_OPTS="-DappName=otter-canal-example -Dlogback.configurationFile=$logback_configurationFile"
+CANAL_OPTS="-DappName=otter-canal-example -Dlogback.configurationFile=$logback_configurationFile  -Dexample.configurationFile=$example_configurationFile"
 
 if [ -e $logback_configurationFile -a -e $example_configurationFile ]
 then 
@@ -87,7 +87,7 @@ then
 	if [ $client_mode == "Cluster" ] ; then 
 		$JAVA $JAVA_OPTS $JAVA_DEBUG_OPT $CANAL_OPTS -classpath .:$CLASSPATH com.alibaba.otter.canal.example.ClusterCanalClientTest 1>>$base/bin/nohup.out 2>&1 &
 	else 
-		$JAVA $JAVA_OPTS $JAVA_DEBUG_OPT $CANAL_OPTS -classpath .:$CLASSPATH com.alibaba.otter.canal.example.SimpleCanalClientTest 1>>$base/bin/nohup.out 2>&1 &
+		$JAVA $JAVA_OPTS $JAVA_DEBUG_OPT $CANAL_OPTS -classpath .:$CLASSPATH com.alibaba.otter.canal.example.CmsTransfer 1>>$base/bin/nohup.out 2>&1 &
 	fi
 	
 	echo $! > $base/bin/canal.pid 
