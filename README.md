@@ -36,7 +36,7 @@
 <li>slave重做中继日志中的事件，将改变反映它自己的数据。</li>
 </ol>
 <h3>canal的工作原理：</h3>
-<p><img width="590" src="http://dl.iteye.com/upload/attachment/0080/3107/c87b67ba-394c-3086-9577-9db05be04c95.jpg" alt="" height="273">
+<p><img width="590" src="https://camo.githubusercontent.com/46c626b4cde399db43b2634a7911a04aecf273a0/687474703a2f2f646c2e69746579652e636f6d2f75706c6f61642f6174746163686d656e742f303038302f333130372f63383762363762612d333934632d333038362d393537372d3964623035626530346339352e6a7067" alt="" height="273">
 <p>原理相对比较简单：</p>
 <ol>
 <li>canal模拟mysql slave的交互协议，伪装自己为mysql slave，向mysql master发送dump协议</li>
@@ -62,11 +62,16 @@ See the wiki page for : <a href="https://github.com/alibaba/canal/wiki" >wiki文
 <li><a href="https://github.com/alibaba/canal/releases">Download</a></li>
 </ul>
 
-<h1>相关资料: </h1>
+<h1>相关资料</h1>
 
 * ADC阿里技术嘉年华分享ppt (放在google docs上，可能需要翻墙): <a href="https://docs.google.com/presentation/d/1MkszUPYRDkfVPz9IqOT1LLT5d9tuwde_WC8GZvjaDRg/edit?usp=sharing">ppt下载</href>  
 * [与阿里巴巴的RocketMQ配合使用](https://github.com/alibaba/RocketMQ)
 
+<h1>相关开源</h1>
+<ol>
+<li>阿里巴巴分布式数据库同步系统(解决中美异地机房)：<a href="http://github.com/alibaba/otter">http://github.com/alibaba/otter</a></li>
+<li>阿里巴巴去Oracle数据迁移同步工具(目标支持MySQL/DRDS)：<a href="http://github.com/alibaba/yugong">http://github.com/alibaba/yugong</a></li>
+</ol>
 
 <h1>问题反馈</h1>
 <ol>

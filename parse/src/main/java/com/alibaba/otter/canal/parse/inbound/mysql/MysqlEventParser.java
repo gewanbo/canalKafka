@@ -22,11 +22,12 @@ import com.alibaba.otter.canal.parse.ha.CanalHAController;
 import com.alibaba.otter.canal.parse.inbound.ErosaConnection;
 import com.alibaba.otter.canal.parse.inbound.HeartBeatCallback;
 import com.alibaba.otter.canal.parse.inbound.SinkFunction;
+import com.alibaba.otter.canal.parse.inbound.mysql.MysqlConnection.BinlogFormat;
+import com.alibaba.otter.canal.parse.inbound.mysql.MysqlConnection.BinlogImage;
 import com.alibaba.otter.canal.parse.inbound.mysql.dbsync.LogEventConvert;
 import com.alibaba.otter.canal.parse.inbound.mysql.dbsync.TableMetaCache;
 import com.alibaba.otter.canal.parse.support.AuthenticationInfo;
 import com.alibaba.otter.canal.protocol.CanalEntry;
-import com.alibaba.otter.canal.protocol.CanalEntry.Entry;
 import com.alibaba.otter.canal.protocol.position.EntryPosition;
 import com.alibaba.otter.canal.protocol.position.LogPosition;
 import com.taobao.tddl.dbsync.binlog.LogEvent;
@@ -62,6 +63,8 @@ public class MysqlEventParser extends AbstractMysqlEventParser implements CanalE
     private TableMetaCache     tableMetaCache;                               // 对应meta
                                                                               // cache
     private int                fallbackIntervalInSeconds         = 60;       // 切换回退时间
+    private BinlogFormat[]     supportBinlogFormats;                         // 支持的binlogFormat,如果设置会执行强校验
+    private BinlogImage[]      supportBinlogImages;                          // 支持的binlogImage,如果设置会执行强校验
 
     // 心跳检查
 
@@ -80,6 +83,34 @@ public class MysqlEventParser extends AbstractMysqlEventParser implements CanalE
                 metaConnection.connect();
             } catch (IOException e) {
                 throw new CanalParseException(e);
+            }
+
+            if (supportBinlogFormats != null && supportBinlogFormats.length > 0) {
+                BinlogFormat format = ((MysqlConnection) metaConnection).getBinlogFormat();
+                boolean found = false;
+                for (BinlogFormat supportFormat : supportBinlogFormats) {
+                    if (supportFormat != null && format == supportFormat) {
+                        found = true;
+                    }
+                }
+
+                if (!found) {
+                    throw new CanalParseException("Unsupported BinlogFormat " + format);
+                }
+            }
+
+            if (supportBinlogImages != null && supportBinlogImages.length > 0) {
+                BinlogImage image = ((MysqlConnection) metaConnection).getBinlogImage();
+                boolean found = false;
+                for (BinlogImage supportImage : supportBinlogImages) {
+                    if (supportImage != null && image == supportImage) {
+                        found = true;
+                    }
+                }
+
+                if (!found) {
+                    throw new CanalParseException("Unsupported BinlogImage " + image);
+                }
             }
 
             tableMetaCache = new TableMetaCache(metaConnection);
@@ -291,6 +322,12 @@ public class MysqlEventParser extends AbstractMysqlEventParser implements CanalE
         }
         return startPosition;
     }
+    
+	protected EntryPosition findEndPosition(ErosaConnection connection) throws IOException {
+		MysqlConnection mysqlConnection = (MysqlConnection) connection;
+		 EntryPosition endPosition = findEndPosition(mysqlConnection);
+		return endPosition;
+	}
 
     protected EntryPosition findStartPositionInternal(ErosaConnection connection) {
         MysqlConnection mysqlConnection = (MysqlConnection) connection;
@@ -668,21 +705,30 @@ public class MysqlEventParser extends AbstractMysqlEventParser implements CanalE
         }
     }
 
-    protected Entry parseAndProfilingIfNecessary(LogEvent bod) throws Exception {
-        long startTs = -1;
-        boolean enabled = getProfilingEnabled();
-        if (enabled) {
-            startTs = System.currentTimeMillis();
-        }
-        CanalEntry.Entry event = binlogParser.parse(bod);
-        if (enabled) {
-            this.parsingInterval = System.currentTimeMillis() - startTs;
-        }
+    public void setSupportBinlogFormats(String formatStrs) {
+        String[] formats = StringUtils.split(formatStrs, ',');
+        if (formats != null) {
+            BinlogFormat[] supportBinlogFormats = new BinlogFormat[formats.length];
+            int i = 0;
+            for (String format : formats) {
+                supportBinlogFormats[i++] = BinlogFormat.valuesOf(format);
+            }
 
-        if (parsedEventCount.incrementAndGet() < 0) {
-            parsedEventCount.set(0);
+            this.supportBinlogFormats = supportBinlogFormats;
         }
-        return event;
+    }
+
+    public void setSupportBinlogImages(String imageStrs) {
+        String[] images = StringUtils.split(imageStrs, ',');
+        if (images != null) {
+            BinlogImage[] supportBinlogImages = new BinlogImage[images.length];
+            int i = 0;
+            for (String image : images) {
+                supportBinlogImages[i++] = BinlogImage.valuesOf(image);
+            }
+
+            this.supportBinlogImages = supportBinlogImages;
+        }
     }
 
     // ===================== setter / getter ========================
