@@ -219,7 +219,7 @@ public class AbstractCMS {
             String tableName  = entry.getHeader().getTableName();
 
             if (entry.getEntryType() == EntryType.ROWDATA) {
-                RowChange rowChage = null;
+                RowChange rowChage;
                 try {
                     rowChage = RowChange.parseFrom(entry.getStoreValue());
                 } catch (Exception e) {
@@ -272,10 +272,10 @@ public class AbstractCMS {
     protected void printColumn(List<Column> columns) {
         for (Column column : columns) {
             StringBuilder builder = new StringBuilder();
-            builder.append(column.getName() + " : " + column.getValue());
-            builder.append("    type=" + column.getMysqlType());
+            builder.append(column.getName()).append(" : ").append(column.getValue());
+            builder.append("    type=").append(column.getMysqlType());
             if (column.getUpdated()) {
-                builder.append("    update=" + column.getUpdated());
+                builder.append("    update=").append(column.getUpdated());
             }
             builder.append(SEP);
             logger.info(builder.toString());
@@ -292,10 +292,10 @@ public class AbstractCMS {
         // One row
         for (Column column : columns) {
             StringBuilder builder = new StringBuilder();
-            builder.append(column.getName() + " : " + column.getValue());
-            builder.append("    type=" + column.getMysqlType());
+            builder.append(column.getName()).append(" : ").append(column.getValue());
+            builder.append("    type=").append(column.getMysqlType());
             if (column.getUpdated()) {
-                builder.append("    update=" + column.getUpdated());
+                builder.append("    update=").append(column.getUpdated());
             }
             builder.append(SEP);
             logger.info(builder.toString() + SEP);
@@ -321,7 +321,7 @@ public class AbstractCMS {
                 messageList = new ArrayList<KeyedMessage<String, String>>();
                 logger.info("Comment message committed successful!" + SEP);
             } catch (Exception e) {
-                logger.error("Send message to kafka error:", e);
+                logger.error("Throws exception when send message to kafka:", e);
             }
         }
     }
@@ -336,10 +336,10 @@ public class AbstractCMS {
         // One row
         for (Column column : columns) {
             StringBuilder builder = new StringBuilder();
-            builder.append(column.getName() + " : " + column.getValue());
-            builder.append("    type=" + column.getMysqlType());
+            builder.append(column.getName()).append(" : ").append(column.getValue());
+            builder.append("    type=").append(column.getMysqlType());
             if (column.getUpdated()) {
-                builder.append("    update=" + column.getUpdated());
+                builder.append("    update=").append(column.getUpdated());
             }
             builder.append(SEP);
             logger.info(builder.toString());
@@ -369,7 +369,7 @@ public class AbstractCMS {
                 messageList = new ArrayList<KeyedMessage<String, String>>();
                 logger.info("Comment message committed successful!" + SEP);
             } catch (Exception e) {
-                logger.error("Send message to kafka error:", e);
+                logger.error("Throws exception when send message to kafka:", e);
             }
         }
     }
@@ -384,10 +384,10 @@ public class AbstractCMS {
         // One row
         for (Column column : columns) {
             StringBuilder builder = new StringBuilder();
-            builder.append(column.getName() + " : " + column.getValue());
-            builder.append("    type=" + column.getMysqlType());
+            builder.append(column.getName()).append(" : ").append(column.getValue());
+            builder.append("    type=").append(column.getMysqlType());
             if (column.getUpdated()) {
-                builder.append("    update=" + column.getUpdated());
+                builder.append("    update=").append(column.getUpdated());
             }
             builder.append(SEP);
             logger.info(builder.toString());
@@ -417,7 +417,7 @@ public class AbstractCMS {
                 messageList = new ArrayList<KeyedMessage<String, String>>();
                 logger.info("Comment message committed successful!" + SEP);
             } catch (Exception e) {
-                logger.error("Send message to kafka error:", e);
+                logger.error("Throws exception when send message to kafka:", e);
             }
         }
     }
